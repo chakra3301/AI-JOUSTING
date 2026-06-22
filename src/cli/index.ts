@@ -40,7 +40,26 @@ async function main(): Promise<void> {
       "AI agents charge at each other in structured passes. One winner.",
     )
     .version(version, "-v, --version")
-    .option("--no-splash", "skip the startup splash screen");
+    .option("--no-splash", "skip the startup splash screen")
+    .option(
+      "--use-subscription",
+      "authenticate with your Claude Pro/Max subscription (Claude Code OAuth) " +
+        "instead of ANTHROPIC_API_KEY — personal use only, may violate Anthropic's ToS",
+    );
+
+  // Opt-in to subscription auth. Surfaced as an env var so the adapter layer
+  // (which has no CLI context) can pick it up, and gated behind a clear warning.
+  program.hook("preAction", (thisCommand) => {
+    if (thisCommand.opts().useSubscription) {
+      process.env.JOUSTING_USE_CLAUDE_SUB = "1";
+      process.stderr.write(
+        color.agentB(
+          "\n⚠  Using your Claude subscription (OAuth) for inference.\n" +
+            "   This is for personal use and may violate Anthropic's Terms of Service.\n\n",
+        ),
+      );
+    }
+  });
 
   program
     .command("init")

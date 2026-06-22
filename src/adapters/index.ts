@@ -6,10 +6,14 @@ import { GeminiAdapter } from "./gemini.js";
 import { GroqAdapter } from "./groq.js";
 import { OllamaAdapter } from "./ollama.js";
 import { MissingKeyError, MissingSdkError } from "./shared.js";
+import { resolveAnthropicAuth } from "./anthropic-auth.js";
 
 interface ProviderMeta {
   // The env var that holds the API key. Undefined means no key is required.
   keyEnv?: string;
+  // Optional custom credential resolver. If present it fully replaces the
+  // keyEnv lookup and may pull credentials from elsewhere (e.g. OAuth).
+  resolve?(): LLMAdapter | null;
   // Builds the adapter. `key` is the resolved API key (empty for keyless).
   create(key: string): LLMAdapter;
 }
@@ -17,6 +21,10 @@ interface ProviderMeta {
 const REGISTRY: Record<Provider, ProviderMeta> = {
   anthropic: {
     keyEnv: "ANTHROPIC_API_KEY",
+    resolve: () => {
+      const auth = resolveAnthropicAuth();
+      return auth ? new AnthropicAdapter(auth) : null;
+    },
     create: (key) => new AnthropicAdapter(key),
   },
   openai: {
@@ -52,6 +60,25 @@ export function getAdapter(provider: Provider, agentName?: string): LLMAdapter {
       `Unknown provider: ${provider}. Valid providers: ${Object.keys(
         REGISTRY,
       ).join(", ")}`,
+    );
+  }
+
+  // Provider with a custom resolver (e.g. anthropic OAuth/subscription).
+  if (meta.resolve) {
+    const cachedResolved = cache.get(provider);
+    if (cachedResolved) return cachedResolved;
+    const resolved = meta.resolve();
+    if (resolved) {
+      cache.set(provider, resolved);
+      return resolved;
+    }
+    const who = agentName ? `Agent '${agentName}'` : "This agent";
+    throw new MissingKeyError(
+      provider,
+      meta.keyEnv ?? "",
+      `${who} uses ${provider} but no credentials were found. Set ` +
+        `${meta.keyEnv}, or pass --use-subscription after \`claude /login\` ` +
+        `to use your Claude subscription.`,
     );
   }
 

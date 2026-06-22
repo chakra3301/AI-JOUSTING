@@ -218,6 +218,20 @@ Keep them in a `.env` file and load it with Node's built-in flag — no extra de
 node --env-file=.env $(which jousting) joust
 ```
 
+### Using your Claude subscription (`--use-subscription`)
+
+If you're logged in with the [Claude Code](https://docs.anthropic.com/en/docs/claude-code) CLI, you can run Anthropic agents on your **Claude Pro/Max subscription** instead of a metered `ANTHROPIC_API_KEY`:
+
+```bash
+claude /login            # once, if you haven't already
+npx jousting joust --use-subscription
+```
+
+Jousting reads the Claude Code OAuth token from your macOS keychain or `~/.claude/.credentials.json` (or the `CLAUDE_CODE_OAUTH_TOKEN` env var). This applies to every `anthropic` agent and the Herald.
+
+> [!WARNING]
+> **Personal use only — this may violate Anthropic's Terms of Service.** Driving a Pro/Max subscription through OAuth outside the official Claude Code client is unsupported and could result in rate-limiting or account action. It is **never** used unless you explicitly pass `--use-subscription`. For anything shared, automated, or production, use a real `ANTHROPIC_API_KEY`. Subscription tokens also expire periodically — run any `claude` command to refresh.
+
 The orchestrator and Herald never import a provider directly — they call `getAdapter(provider)`, which dispatches to the right adapter, all behind a shared `LLMAdapter` interface. Provider SDKs are loaded lazily, so:
 
 - A missing key fails with `Agent '<name>' uses <provider> but <KEY> is not set.`
