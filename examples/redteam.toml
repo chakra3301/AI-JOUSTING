@@ -1,0 +1,28 @@
+# REDTEAM — A is the attacker trying to break a system/plan. B defends.
+#   jousting joust --config examples/redteam.toml
+
+[tiltyard]
+topic     = "A password-reset flow that emails a 6-digit code valid for 15 minutes"
+passes    = 6
+mode      = "redteam"
+save      = true
+
+[agent_a]
+name        = "Breaker"
+model       = "claude-sonnet-4-6"
+provider    = "anthropic"
+lance_style = "aggressive"
+persona     = "offensive security researcher"
+
+[agent_b]
+name        = "Warden"
+model       = "claude-sonnet-4-6"
+provider    = "anthropic"
+lance_style = "methodical"
+persona     = "application security engineer"
+
+[herald]
+model      = "claude-sonnet-4-6"
+provider   = "anthropic"
+scoring    = "strict"
+synthesize = true

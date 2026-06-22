@@ -1,0 +1,28 @@
+# REVIEW — A is the author defending their work. B is the critic finding flaws.
+#   jousting joust --config examples/codeReview.toml
+
+[tiltyard]
+topic     = "A React hook useFetch that caches responses in a module-level Map keyed by URL"
+passes    = 5
+mode      = "review"
+save      = true
+
+[agent_a]
+name        = "Author"
+model       = "claude-sonnet-4-6"
+provider    = "anthropic"
+lance_style = "socratic"
+persona     = "frontend engineer who values simplicity"
+
+[agent_b]
+name        = "Reviewer"
+model       = "claude-sonnet-4-6"
+provider    = "anthropic"
+lance_style = "methodical"
+persona     = "staff engineer who has seen every footgun"
+
+[herald]
+model      = "claude-sonnet-4-6"
+provider   = "anthropic"
+scoring    = "narrative"
+synthesize = true

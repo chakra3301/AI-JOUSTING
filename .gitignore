@@ -1,0 +1,7 @@
+node_modules/
+dist/
+*.joust
+.env
+.env.*
+*.log
+.DS_Store

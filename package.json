@@ -1,0 +1,72 @@
+{
+  "name": "jousting",
+  "version": "1.0.0",
+  "description": "AI agents charge at each other in structured passes. A framework for adversarial multi-agent reasoning.",
+  "keywords": [
+    "ai",
+    "agents",
+    "llm",
+    "debate",
+    "redteam",
+    "multi-agent",
+    "anthropic",
+    "openai",
+    "cli"
+  ],
+  "license": "MIT",
+  "author": "chakra3301",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chakra3301/AI-JOUSTING.git"
+  },
+  "bugs": {
+    "url": "https://github.com/chakra3301/AI-JOUSTING/issues"
+  },
+  "homepage": "https://github.com/chakra3301/AI-JOUSTING#readme",
+  "type": "module",
+  "main": "dist/cli/index.js",
+  "bin": {
+    "jousting": "dist/cli/index.js"
+  },
+  "files": [
+    "dist",
+    "examples",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsx src/cli/index.ts",
+    "prepublishOnly": "npm run build"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "latest",
+    "chalk": "^5",
+    "commander": "^12",
+    "nanoid": "^5",
+    "openai": "latest",
+    "ora": "^8",
+    "smol-toml": "^1",
+    "zod": "^3"
+  },
+  "peerDependencies": {
+    "@google/generative-ai": "*",
+    "groq-sdk": "*"
+  },
+  "peerDependenciesMeta": {
+    "@google/generative-ai": {
+      "optional": true
+    },
+    "groq-sdk": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "tsup": "^8",
+    "tsx": "^4",
+    "typescript": "^5"
+  }
+}

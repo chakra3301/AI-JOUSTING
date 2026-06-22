@@ -1,0 +1,28 @@
+# DEBATE — A argues for the topic, B argues against. Classic adversarial.
+#   jousting joust --config examples/debate.toml
+
+[tiltyard]
+topic     = "Should startups adopt a four-day work week?"
+passes    = 5
+mode      = "debate"
+save      = true
+
+[agent_a]
+name        = "Lancer"
+model       = "claude-sonnet-4-6"
+provider    = "anthropic"
+lance_style = "aggressive"
+persona     = "futurist who champions worker autonomy"
+
+[agent_b]
+name        = "Paladin"
+model       = "claude-sonnet-4-6"
+provider    = "anthropic"
+lance_style = "methodical"
+persona     = "operations lead obsessed with throughput"
+
+[herald]
+model      = "claude-sonnet-4-6"
+provider   = "anthropic"
+scoring    = "strict"
+synthesize = true

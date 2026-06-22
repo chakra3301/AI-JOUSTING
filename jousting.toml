@@ -1,0 +1,28 @@
+# Example jousting config. Run `jousting joust` in this directory.
+# See examples/ for redteam, review, synthesis, and plan setups.
+
+[tiltyard]
+topic     = "Should we rewrite this in Rust?"
+passes    = 5
+mode      = "debate"            # debate|redteam|review|synthesis|plan
+save      = true
+
+[agent_a]
+name        = "Lancer"
+model       = "claude-sonnet-4-6"
+provider    = "anthropic"          # anthropic|openai|gemini|groq|openrouter|ollama
+lance_style = "aggressive"         # aggressive|methodical|socratic
+persona     = "senior engineer who loves Rust"
+
+[agent_b]
+name        = "Paladin"
+model       = "claude-sonnet-4-6"
+provider    = "anthropic"
+lance_style = "methodical"
+persona     = "pragmatic CTO who ships in Go"
+
+[herald]
+model      = "claude-sonnet-4-6"
+provider   = "anthropic"
+scoring    = "strict"              # strict|lenient|narrative
+synthesize = true

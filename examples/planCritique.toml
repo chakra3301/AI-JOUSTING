@@ -1,0 +1,49 @@
+# PLAN — A proposes a strategy/architecture. B stress-tests and pokes holes.
+# A can update the plan in response. Herald evaluates the final version.
+#   jousting joust --config examples/planCritique.toml
+
+[tiltyard]
+topic     = "Migrate a monolith to microservices over the next two quarters"
+passes    = 6
+mode      = "plan"
+save      = true
+
+[agent_a]
+name        = "Architect"
+model       = "claude-sonnet-4-6"
+provider    = "anthropic"
+lance_style = "methodical"
+persona     = "principal engineer leading the migration"
+
+[agent_b]
+name        = "Skeptic"
+model       = "claude-sonnet-4-6"
+provider    = "anthropic"
+lance_style = "socratic"
+persona     = "SRE who has been paged at 3am too many times"
+
+[herald]
+model      = "claude-sonnet-4-6"
+provider   = "anthropic"
+scoring    = "strict"
+synthesize = true
+
+# Tournament mode (optional): run `jousting tournament --config examples/planCritique.toml`
+# to play these agents in a bracket. Uncomment and add 2+ agents.
+#
+# [tournament]
+# format = "roundrobin"   # roundrobin | elimination
+#
+# [[tournament.agents]]
+# name = "Architect"
+# model = "claude-sonnet-4-6"
+# provider = "anthropic"
+# lance_style = "methodical"
+# persona = "principal engineer"
+#
+# [[tournament.agents]]
+# name = "Skeptic"
+# model = "claude-sonnet-4-6"
+# provider = "anthropic"
+# lance_style = "socratic"
+# persona = "battle-scarred SRE"
