@@ -147,6 +147,25 @@ test("ensureFreshToken falls back to current token if refresh fails but token st
   assert.equal(ensureFreshToken(s, d), "still-valid");
 });
 
+test("ensureFreshToken throws actionable error if persisting the rotated token fails", () => {
+  const d = deps({
+    persist: () => {
+      throw new Error("keychain write denied");
+    },
+  });
+  const s = stored({
+    accessToken: "old",
+    refreshToken: "old-refresh",
+    expiresAt: NOW + 2 * MINUTE,
+  });
+  assert.throws(() => ensureFreshToken(s, d), (e: Error) => {
+    assert.match(e.message, /FAILED to save the new/);
+    assert.match(e.message, /claude \/login/);
+    assert.match(e.message, /keychain write denied/);
+    return true;
+  });
+});
+
 test("ensureFreshToken rethrows if refresh fails and token already expired", () => {
   const d = deps({
     now: () => NOW,

@@ -148,39 +148,70 @@ function refreshTokenSync(refreshToken: string): RefreshResult {
   throw new Error(`OAuth token refresh failed: ${lastErr}`);
 }
 
+// Re-read just the persisted refresh token straight from a given store, so we
+// can confirm a write-back actually landed where Claude Code will look.
+function readbackRefreshToken(source: StoredOauth["source"]): string | null {
+  try {
+    if (source === "keychain") {
+      const raw = execFileSync(
+        "security",
+        ["find-generic-password", "-s", KEYCHAIN_SERVICE, "-w"],
+        { encoding: "utf8", stdio: ["ignore", "pipe", "ignore"] },
+      );
+      const rt = JSON.parse(raw)?.claudeAiOauth?.refreshToken;
+      return typeof rt === "string" ? rt : null;
+    }
+    if (source === "file") {
+      const rt = JSON.parse(readFileSync(CRED_FILE(), "utf8"))?.claudeAiOauth
+        ?.refreshToken;
+      return typeof rt === "string" ? rt : null;
+    }
+  } catch {
+    return null;
+  }
+  return null;
+}
+
 // Write an updated credential record back to its origin so the rotated refresh
-// token survives and Claude Code itself keeps working. Best-effort: failures to
-// persist do not abort the run (the in-memory token is still usable now).
+// token survives and Claude Code itself keeps working.
+//
+// SAFETY: Anthropic rotates the refresh token on every refresh — the old one is
+// dead the instant we call the endpoint. So if we can't durably persist the new
+// one where Claude Code reads it, Claude Code is now broken. We therefore write,
+// then READ BACK and verify, and THROW on any failure so the caller can warn the
+// user loudly (instead of silently leaving them logged out everywhere).
 function persistOauth(stored: StoredOauth): void {
   if (stored.source === "env") return; // nothing to write
   const serialized = JSON.stringify(stored.record);
+  const expected =
+    typeof stored.oauth.refreshToken === "string"
+      ? stored.oauth.refreshToken
+      : null;
 
   if (stored.source === "keychain") {
-    try {
-      execFileSync(
-        "security",
-        [
-          "add-generic-password",
-          "-U",
-          "-a",
-          keychainAccount(),
-          "-s",
-          KEYCHAIN_SERVICE,
-          "-w",
-          serialized,
-        ],
-        { stdio: ["ignore", "ignore", "ignore"] },
-      );
-    } catch {
-      // best-effort
-    }
-    return;
+    execFileSync(
+      "security",
+      [
+        "add-generic-password",
+        "-U",
+        "-a",
+        keychainAccount(),
+        "-s",
+        KEYCHAIN_SERVICE,
+        "-w",
+        serialized,
+      ],
+      { stdio: ["ignore", "ignore", "pipe"] },
+    );
+  } else {
+    writeFileSync(CRED_FILE(), serialized + "\n", { mode: 0o600 });
   }
 
-  try {
-    writeFileSync(CRED_FILE(), serialized + "\n", { mode: 0o600 });
-  } catch {
-    // best-effort
+  // Verify the rotated refresh token is actually retrievable from the store.
+  if (expected !== null && readbackRefreshToken(stored.source) !== expected) {
+    throw new Error(
+      `wrote credential to ${stored.source} but read-back did not match`,
+    );
   }
 }
 
@@ -287,10 +318,24 @@ export function ensureFreshToken(
     return accessToken; // still valid for now; proceed
   }
 
-  // Update the record in place (preserving scopes/subscriptionType/etc.) and
-  // persist so the rotated refresh token isn't lost.
+  // The server has now rotated the refresh token: `refreshToken` above is dead
+  // and `refreshed.refresh_token` is the only valid one. Update the record in
+  // place (preserving scopes/subscriptionType/etc.) and persist it.
   applyRefreshedToken(oauth, refreshed, now);
-  deps.persist(stored);
+  try {
+    deps.persist(stored);
+  } catch (err) {
+    // We consumed a one-time refresh token but couldn't store the replacement.
+    // Claude Code now holds a dead token. Fail loudly with recovery steps
+    // rather than letting the user silently get logged out everywhere.
+    throw new Error(
+      "Refreshed your Claude subscription token but FAILED to save the new " +
+        "one back to the Claude Code credential store " +
+        `(${stored.source}): ${err instanceof Error ? err.message : String(err)}.\n` +
+        "To avoid being logged out, run `claude /login` to re-authenticate. " +
+        "You can also use ANTHROPIC_API_KEY instead of --use-subscription.",
+    );
+  }
 
   return refreshed.access_token;
 }
