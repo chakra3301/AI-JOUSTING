@@ -229,8 +229,10 @@ npx jousting joust --use-subscription
 
 Jousting reads the Claude Code OAuth token from your macOS keychain or `~/.claude/.credentials.json` (or the `CLAUDE_CODE_OAUTH_TOKEN` env var). This applies to every `anthropic` agent and the Herald.
 
+The access token is **refreshed automatically** when it's expired (or within 5 minutes of expiring), so a long joust never dies mid-run. Jousting exchanges the stored refresh token at `platform.claude.com` (falling back to the legacy `console.anthropic.com` endpoint), then writes the rotated credential back to its origin (keychain or `~/.claude/.credentials.json`) so the next run — and Claude Code itself — stay logged in. If no refresh token is available and the access token has already expired, Jousting tells you to run `claude /login`.
+
 > [!WARNING]
-> **Personal use only — this may violate Anthropic's Terms of Service.** Driving a Pro/Max subscription through OAuth outside the official Claude Code client is unsupported and could result in rate-limiting or account action. It is **never** used unless you explicitly pass `--use-subscription`. For anything shared, automated, or production, use a real `ANTHROPIC_API_KEY`. Subscription tokens also expire periodically — run any `claude` command to refresh.
+> **Personal use only — this may violate Anthropic's Terms of Service.** Driving a Pro/Max subscription through OAuth outside the official Claude Code client is unsupported and could result in rate-limiting or account action. It is **never** used unless you explicitly pass `--use-subscription`. For anything shared, automated, or production, use a real `ANTHROPIC_API_KEY`.
 
 The orchestrator and Herald never import a provider directly — they call `getAdapter(provider)`, which dispatches to the right adapter, all behind a shared `LLMAdapter` interface. Provider SDKs are loaded lazily, so:
 
