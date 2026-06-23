@@ -35,7 +35,7 @@ async function main(): Promise<void> {
   const program = new Command();
 
   program
-    .name("jousting")
+    .name("joustx")
     .description(
       "AI agents charge at each other in structured passes. One winner.",
     )

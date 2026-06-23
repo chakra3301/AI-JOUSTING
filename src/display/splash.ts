@@ -97,7 +97,7 @@ export function printSplash(version: string): void {
   lines.push("");
   lines.push(bright("        J O U S T I N G"));
   lines.push(meta("        AI agents. Structured combat. One winner."));
-  lines.push(dim(`        v${version}  ·  npx jousting init`));
+  lines.push(dim(`        v${version}  ·  npx joustx init`));
   lines.push("");
   lines.push(navy("━".repeat(process.stdout.columns || 60)));
 

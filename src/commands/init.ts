@@ -72,7 +72,7 @@ export async function initCommand(
       color.herald(DEFAULT_CONFIG_FILENAME) +
       color.ui(` at ${target}\n`) +
       color.ui(`Run `) +
-      color.agentA("jousting joust") +
+      color.agentA("joustx joust") +
       color.ui(` to begin.\n`),
   );
 }

@@ -425,9 +425,9 @@ h2.h{
     <h1>Jousting</h1>
     <p class="tagline">AI agents. <b>Structured combat.</b> One winner.</p>
     <div class="cta-row">
-      <button class="term-pill" id="copyCmd" title="Click to copy" aria-label="Copy install command: npx jousting init">
+      <button class="term-pill" id="copyCmd" title="Click to copy" aria-label="Copy install command: npx joustx init">
         <span class="dot3" aria-hidden="true"><i></i><i></i><i></i></span>
-        <span class="prompt">$</span><span class="cmd">npx jousting init</span><span class="cur" aria-hidden="true"></span>
+        <span class="prompt">$</span><span class="cmd">npx joustx init</span><span class="cur" aria-hidden="true"></span>
         <span class="copy" id="copyLabel">copy</span>
       </button>
       <a class="btn-ghost" href="https://github.com/chakra3301/AI-JOUSTING" rel="noopener">View on GitHub ↗</a>
@@ -482,7 +482,7 @@ h2.h{
     <div class="terminal reveal d2" id="terminal" role="img" aria-label="Terminal showing a jousting debate: Agent A and Agent B exchange arguments across three passes; the Herald scores each pass and declares Agent B the winner 2 to 1.">
       <div class="term-bar">
         <span class="dots" aria-hidden="true"><i></i><i></i><i></i></span>
-        <span class="title">jousting — debate — the-lists</span>
+        <span class="title">joustx — debate — the-lists</span>
       </div>
       <div class="term-body" id="termBody"></div>
     </div>
@@ -546,7 +546,7 @@ h2.h{
         <span class="qn">01</span>
         <h3>Scaffold</h3>
         <p>Drop a starter <code style="font-family:var(--ff-mono);color:var(--blue-bright)">jousting.toml</code> into your repo.</p>
-        <div class="code"><span class="c-prompt">$ </span>npx jousting init</div>
+        <div class="code"><span class="c-prompt">$ </span>npx joustx init</div>
       </div>
       <div class="qs-step reveal d2">
         <span class="qn">02</span>
@@ -558,7 +558,7 @@ h2.h{
         <span class="qn">03</span>
         <h3>Charge</h3>
         <p>Run a joust and watch the Herald score it live.</p>
-        <div class="code"><span class="c-prompt">$ </span>npx jousting run debate <span class="c-dim">"…"</span></div>
+        <div class="code"><span class="c-prompt">$ </span>npx joustx run debate <span class="c-dim">"…"</span></div>
       </div>
     </div>
   </div>
@@ -608,7 +608,7 @@ h2.h{
     <span class="mark" id="footMark" aria-hidden="true"></span>
     <div class="flinks">
       <a href="https://github.com/chakra3301/AI-JOUSTING" rel="noopener">GitHub ↗</a>
-      <a href="https://www.npmjs.com/package/jousting" rel="noopener">npm ↗</a>
+      <a href="https://www.npmjs.com/package/joustx" rel="noopener">npm ↗</a>
       <a href="#top">Back to top ↑</a>
     </div>
     <p class="built">Built with the Anthropic API.</p>
@@ -1024,7 +1024,7 @@ h2.h{
     const body = document.getElementById('termBody');
     if(!body) return;
     const L = [
-      ['c-prompt','$ ','npx jousting run debate "Should we ship the migration this week?"'],
+      ['c-prompt','$ ','npx joustx run debate "Should we ship the migration this week?"'],
       ['c-dim','',''],
       ['c-dim','','⚔  Tournament · mode=debate · passes=3 · herald=opus'],
       ['c-rule','','─────────────────────────────────────────────'],
@@ -1130,7 +1130,7 @@ h2.h{
     const label=document.getElementById('copyLabel');
     if(!btn) return;
     btn.addEventListener('click', async ()=>{
-      try{ await navigator.clipboard.writeText('npx jousting init'); label.textContent='copied ✓'; }
+      try{ await navigator.clipboard.writeText('npx joustx init'); label.textContent='copied ✓'; }
       catch(e){ label.textContent='⌘C'; }
       setTimeout(()=>label.textContent='copy',1600);
     });

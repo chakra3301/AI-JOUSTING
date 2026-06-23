@@ -23,7 +23,7 @@ export function resolveConfigPath(configPath?: string): string {
   const path = resolve(configPath ?? DEFAULT_CONFIG_FILENAME);
   if (!existsSync(path)) {
     throw new ConfigError(
-      `No config found at ${path}. Run \`jousting init\` to create one.`,
+      `No config found at ${path}. Run \`joustx init\` to create one.`,
     );
   }
   return path;

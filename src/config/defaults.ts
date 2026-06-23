@@ -37,7 +37,7 @@ export function defaultConfig(
   };
 }
 
-// A TOML template string for `jousting init`.
+// A TOML template string for `joustx init`.
 export function defaultTomlTemplate(
   topic = "Should we rewrite this in Rust?",
   mode: Mode = "debate",

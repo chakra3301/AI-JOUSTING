@@ -1,5 +1,5 @@
 {
-  "name": "jousting",
+  "name": "joustx",
   "version": "1.0.0",
   "description": "AI agents charge at each other in structured passes. A framework for adversarial multi-agent reasoning.",
   "keywords": [
@@ -26,11 +26,12 @@
   "type": "module",
   "main": "dist/cli/index.js",
   "bin": {
-    "jousting": "dist/cli/index.js"
+    "joustx": "dist/cli/index.js"
   },
   "files": [
     "dist",
     "examples",
+    "scripts",
     "README.md"
   ],
   "engines": {
@@ -40,6 +41,9 @@
     "build": "tsup",
     "dev": "tsx src/cli/index.ts",
     "test": "tsx --test tests/*.test.ts",
+    "prepare": "npm run build",
+    "postinstall": "node scripts/postinstall.mjs",
+    "link:global": "npm link",
     "prepublishOnly": "npm run build"
   },
   "dependencies": {

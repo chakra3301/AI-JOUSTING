@@ -1,7 +1,7 @@
 # Jousting ⚔
 
 [![CI](https://github.com/chakra3301/AI-JOUSTING/actions/workflows/ci.yml/badge.svg)](https://github.com/chakra3301/AI-JOUSTING/actions/workflows/ci.yml)
-[![npm version](https://img.shields.io/npm/v/jousting.svg)](https://www.npmjs.com/package/jousting)
+[![npm version](https://img.shields.io/npm/v/joustx.svg)](https://www.npmjs.com/package/joustx)
 [![license](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
 [![node](https://img.shields.io/badge/node-%3E%3D20-brightgreen.svg)](https://nodejs.org)
 [![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178C6.svg)](https://www.typescriptlang.org/)
@@ -19,9 +19,9 @@ The metaphor is a medieval joust. Each pass is one charge down the tiltyard. A c
 ## Install
 
 ```bash
-npm install -g jousting
+npm install -g joustx
 # or run without installing
-npx jousting init
+npx joustx init
 ```
 
 Requires **Node.js 20+**.
@@ -32,14 +32,14 @@ Three commands and you're running:
 
 ```bash
 export ANTHROPIC_API_KEY=sk-...      # 1. set your key
-npx jousting init --topic "Should we rewrite this in Rust?"   # 2. scaffold config
-npx jousting joust                   # 3. run the joust
+npx joustx init --topic "Should we rewrite this in Rust?"   # 2. scaffold config
+npx joustx joust                   # 3. run the joust
 ```
 
 Every joust is saved as a `.joust` replay file you can replay or re-score later:
 
 ```bash
-jousting replay should-we-rewrite-this-in-rust-AbC123.joust
+joustx replay should-we-rewrite-this-in-rust-AbC123.joust
 ```
 
 ## Joust modes
@@ -95,21 +95,21 @@ synthesize = true                                # produce a final synthesis
 ### Commands
 
 ```bash
-jousting init          # scaffold a jousting.toml (prompts for topic interactively)
+joustx init          # scaffold a jousting.toml (prompts for topic interactively)
   --topic "..."  --mode <mode>  --force
 
-jousting joust         # run a single joust (reads ./jousting.toml by default)
+joustx joust         # run a single joust (reads ./jousting.toml by default)
   --config <path>  --topic "..."  --passes <n>  --mode <mode>
   --dry-run            # print resolved config + prompts, make no API calls
   --no-save            # don't write a .joust file
 
-jousting tournament    # run a bracket (requires a [tournament] block)
+joustx tournament    # run a bracket (requires a [tournament] block)
   --config <path>  --topic "..."  --passes <n>  --mode <mode>
 
-jousting replay <file.joust>
+joustx replay <file.joust>
   --speed <1|2|3>      # 1 slow, 2 medium, 3 instant
 
-jousting herald <file.joust>   # re-score a saved joust
+joustx herald <file.joust>   # re-score a saved joust
   --model <model>  --scoring <mode>  --save
 ```
 
@@ -180,7 +180,7 @@ persona = "pragmatic Go shipper"
 Then:
 
 ```bash
-jousting tournament
+joustx tournament
 ```
 
 - **`roundrobin`** — every agent jousts every other; most wins takes the crown.
@@ -215,7 +215,7 @@ OPENROUTER_API_KEY=sk-or-...
 Keep them in a `.env` file and load it with Node's built-in flag — no extra dependency:
 
 ```bash
-node --env-file=.env $(which jousting) joust
+node --env-file=.env $(which joustx) joust
 ```
 
 ### Using your Claude subscription (`--use-subscription`)
@@ -224,7 +224,7 @@ If you're logged in with the [Claude Code](https://docs.anthropic.com/en/docs/cl
 
 ```bash
 claude /login            # once, if you haven't already
-npx jousting joust --use-subscription
+npx joustx joust --use-subscription
 ```
 
 Jousting reads the Claude Code OAuth token from your macOS keychain or `~/.claude/.credentials.json` (or the `CLAUDE_CODE_OAUTH_TOKEN` env var). This applies to every `anthropic` agent and the Herald.
