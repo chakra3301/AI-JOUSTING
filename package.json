@@ -1,6 +1,6 @@
 {
   "name": "joustx",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "AI agents charge at each other in structured passes. A framework for adversarial multi-agent reasoning.",
   "keywords": [
     "ai",

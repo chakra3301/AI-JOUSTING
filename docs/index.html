@@ -558,7 +558,7 @@ h2.h{
         <span class="qn">03</span>
         <h3>Charge</h3>
         <p>Run a joust and watch the Herald score it live.</p>
-        <div class="code"><span class="c-prompt">$ </span>npx joustx run debate <span class="c-dim">"…"</span></div>
+        <div class="code"><span class="c-prompt">$ </span>npx joustx joust <span class="c-dim">--mode debate --topic "…"</span></div>
       </div>
     </div>
   </div>
@@ -1024,7 +1024,7 @@ h2.h{
     const body = document.getElementById('termBody');
     if(!body) return;
     const L = [
-      ['c-prompt','$ ','npx joustx run debate "Should we ship the migration this week?"'],
+      ['c-prompt','$ ','npx joustx joust --mode debate --topic "Should we ship the migration this week?"'],
       ['c-dim','',''],
       ['c-dim','','⚔  Tournament · mode=debate · passes=3 · herald=opus'],
       ['c-rule','','─────────────────────────────────────────────'],
